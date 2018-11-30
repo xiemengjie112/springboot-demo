@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    student:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost/student
+      username: root
+      password: root
+    test001:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost/test001
+      username: root
+      password: root
+  aop:
+    auto: true
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+
+server:
+  port: 8081
+#扫描mapper.xml
+#mybatis:
+#  mapperLocations: classpath*:/Mapper/*.xml
+#  typeAliasesPackage: com.xmj.springbootdemo.entity
+#  configuration:
+#    callSettersOnNulls: false
+# 打印sql
+logging:
+  level:
+    com.xmj.springbootdemo.mapper: debug
