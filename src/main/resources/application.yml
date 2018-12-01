@@ -3,12 +3,12 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     student:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://192.168.1.105:3306/student
+      url: jdbc:mysql://localhost/student
       username: root
       password: root
     test001:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://192.168.1.105:3306/test001
+      url: jdbc:mysql://localhost/test001
       username: root
       password: root
   aop:
@@ -30,3 +30,4 @@ server:
 logging:
   level:
     com.xmj.springbootdemo.mapper: debug
+

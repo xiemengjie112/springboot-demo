@@ -1,6 +1,8 @@
 package com.xmj.springbootdemo.service.impl;
 
 import com.csvreader.CsvWriter;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xmj.springbootdemo.entity.student.Student;
 import com.xmj.springbootdemo.entity.student.StudentExample;
 import com.xmj.springbootdemo.mapper.student.StudentMapper;
@@ -8,6 +10,7 @@ import com.xmj.springbootdemo.mapper.test001.StudentTest001Mapper;
 import com.xmj.springbootdemo.service.StudentService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +86,18 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
+    @Override
+    public String selectStudentsPageInfo(int page, int pageSize) {
+        //mysql 查询 limt oracle 伪劣 sqlServer top
+        //改写sql 添加limit
+        PageHelper.startPage(page, pageSize);
+        List<Map<String, Object>> listMap = studentMapper.findStudents();
+        PageInfo pageInfo = new PageInfo<>(listMap);
+        JSONObject result = new JSONObject();
+        result.put("total",pageInfo.getTotal());
+        result.put("rows,",pageInfo.getList());
+        return result.toString();
+    }
 
     @Override
     public void exportStudents(HttpServletResponse response) throws Exception {

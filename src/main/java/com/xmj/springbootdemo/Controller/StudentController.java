@@ -34,28 +34,28 @@ public class StudentController {
     private StudentService studentServicel;
 
     @GetMapping(value = "/index")
-    public String toIndex(){
+    public String toIndex() {
         return "/index";
     }
 
     /*
-    * @Author: xieMengJie
-    * @Date: 2018/12/1 15:39
-    * @Param: [request, file]
-    * @return: java.lang.String
-    * @Description:  报表导入
-    */
+     * @Author: xieMengJie
+     * @Date: 2018/12/1 15:39
+     * @Param: [request, file]
+     * @return: java.lang.String
+     * @Description:  报表导入
+     */
     @PostMapping(value = "/submitExcel")
     @ResponseBody
-    public String submitExcel(HttpServletRequest request,@RequestParam(value="uploadFile")MultipartFile file){
+    public String submitExcel( @RequestParam(value = "uploadFile") MultipartFile file) {
         try {
             FileInputStream inputStream = (FileInputStream) file.getInputStream();
             LinkedHashMap map = new LinkedHashMap();
-            map.put("学生状态","dr");
-            map.put("学生姓名","studentName");
-            map.put("学生年龄","age");
+            map.put("学生状态", "dr");
+            map.put("学生姓名", "studentName");
+            map.put("学生年龄", "age");
             //String [] pk = new String[]{"p"};
-            List<T> students = ExcelUtil.excelToList(inputStream,"学生明细", Student.class,map,null);
+            List<T> students = ExcelUtil.excelToList(inputStream, "学生明细", Student.class, map, null);
             System.out.println(students);
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,47 +69,45 @@ public class StudentController {
     @MyLog("查询全部学生信息")
     @GetMapping(value = "/students")
     @ResponseBody
-    public String findAllStudent(HttpServletRequest request){
+    public String findAllStudent() {
         return studentServicel.findStudentAll();
     }
+
     @MyLog("批量插入学生信息")
     @GetMapping(value = "/add/Students")
     @ResponseBody
-    public String addStudents(HttpServletRequest request){
+    public String addStudents(HttpServletRequest request) {
         return studentServicel.addStudents();
     }
 
-    
-    @GetMapping(value = "/initStudents")
-    @ResponseBody
-    public String initStudents(HttpServletRequest request){
-        String s =request.getServletContext().getAttribute("students").toString();
-        return s;
-    }
 
     /*
-    * @Author: xieMengJie
-    * @Date: 2018/12/1 15:39
-    * @Param: [response]
-    * @return: void
-    * @Description: csv导出
-    */
+     * @Author: xieMengJie
+     * @Date: 2018/12/1 15:39
+     * @Param: [response]
+     * @return: void
+     * @Description: csv导出
+     */
+    @MyLog("excel导出")
     @GetMapping(value = "/exportstudents")
     @ResponseBody
-    public void exportStudent(HttpServletResponse response){
-        try {
-             studentServicel.exportStudents(response);
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("导出失败");
-        }
+    public void exportStudent(HttpServletResponse response) throws Exception {
+        studentServicel.exportStudents(response);
     }
 
-
-
-
-
-
+    /**
+     * mybatis集成pageHelper分页查询
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @MyLog("分页查询学生信息")
+    @GetMapping(value = "/student/page/list")
+    @ResponseBody
+    public String studentsPageInfo(int page, int pageSize) {
+        return studentServicel.selectStudentsPageInfo(page, pageSize);
+    }
 
 
 }
