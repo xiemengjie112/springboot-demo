@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -37,6 +38,13 @@ public class StudentController {
         return "/index";
     }
 
+    /*
+    * @Author: xieMengJie
+    * @Date: 2018/12/1 15:39
+    * @Param: [request, file]
+    * @return: java.lang.String
+    * @Description:  报表导入
+    */
     @PostMapping(value = "/submitExcel")
     @ResponseBody
     public String submitExcel(HttpServletRequest request,@RequestParam(value="uploadFile")MultipartFile file){
@@ -73,6 +81,7 @@ public class StudentController {
         return studentServicel.addStudents();
     }
 
+    
     @GetMapping(value = "/initStudents")
     @ResponseBody
     public String initStudents(HttpServletRequest request){
@@ -80,9 +89,14 @@ public class StudentController {
         return s;
     }
 
-
-
-/*    @GetMapping(value = "/exportstudents")
+    /*
+    * @Author: xieMengJie
+    * @Date: 2018/12/1 15:39
+    * @Param: [response]
+    * @return: void
+    * @Description: csv导出
+    */
+    @GetMapping(value = "/exportstudents")
     @ResponseBody
     public void exportStudent(HttpServletResponse response){
         try {
@@ -91,7 +105,7 @@ public class StudentController {
             e.printStackTrace();
             System.out.println("导出失败");
         }
-    }*/
+    }
 
     /**
      * 内部类

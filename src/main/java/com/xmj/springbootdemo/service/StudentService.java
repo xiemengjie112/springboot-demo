@@ -21,7 +21,7 @@ public interface StudentService {
 
     String findStudentTest001All();
 
-    //void exportStudents(HttpServletResponse response) throws Exception;
+    void exportStudents(HttpServletResponse response) throws Exception;
 
     void initStudents(List<Map<String,Object>> paramMap);
 

@@ -1,14 +1,22 @@
 package com.xmj.springbootdemo.service.impl;
 
+import com.csvreader.CsvWriter;
 import com.xmj.springbootdemo.entity.student.Student;
 import com.xmj.springbootdemo.entity.student.StudentExample;
 import com.xmj.springbootdemo.mapper.student.StudentMapper;
 import com.xmj.springbootdemo.mapper.test001.StudentTest001Mapper;
 import com.xmj.springbootdemo.service.StudentService;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -72,43 +80,46 @@ public class StudentServiceImpl implements StudentService {
 
 
 
-/*    @Override
+    @Override
     public void exportStudents(HttpServletResponse response) throws Exception {
-        List<Student> listMap = studentMapper.findStudents();
-        LinkedHashMap map = new LinkedHashMap();
-        map.put("dr","学生状态");
-        map.put("studentName","学生姓名");
-        map.put("age","学生年龄");
-        *//*for (int i = 0; i < listMap.size(); i++) {
-            Map paramMap =listMap.get(i);
-            map.put("listMap.dr",paramMap.get("dr").toString());
-            map.put("map.studentName",paramMap.get("studentName"));
-            map.put("paramMap.age",paramMap.get("age").toString());
-        }*//*
-       1
-        //HashMap<String,Object> dataMap = new HashMap<>();
-
-      *//*  for(int i=0;i<30;i++){
-            dataMap.put("datetime", "2017-12-13 10:43:00");
-            dataMap.put("person", "张翠山");
-            dataMap.put("type", "文本");
-            dataMap.put("content", "工作一定要认真，态度要端正，作风要优良，行事要效率，力争打造一个完美的产品出来。");
-            listMap.add(dataMap);
-        }*//*
-     *//*
-        String title = "学生列表";
-        String[] rowsName = new String[]{"序号", "姓名", "年龄"};
-        List<Object[]> dataList = new ArrayList<>();
-        Object[] objs ;
+        List<Map<String, Object>> listMap = studentMapper.findStudents();
+        File tempFile = File.createTempFile("datas", ".csv");
+        CsvWriter csvWriter = new CsvWriter(tempFile.getCanonicalPath(), ',', Charset.forName("UTF-8"));
+        String[] title = {"姓名", "年龄"};
+        csvWriter.writeRecord(title);
+        // 定义表的标题
         for (int i = 0; i < listMap.size(); i++) {
-            Map<String, Object> data = listMap.get(i);
-            objs = new Object[rowsName.length];
-            objs[0] = i;
-            objs[1] = data.get("studentName");
-            objs[2] = data.get("age");
-            dataList.add(objs);
+            Map<String, Object> per = listMap.get(i);
+            csvWriter.write(per.get("studentName").toString());
+            csvWriter.write(per.get("age").toString());
+            csvWriter.endRecord();
         }
-        ExportExcel ex = new ExportExcel(title, rowsName, dataList);
-        ex.export(response);*//*
-    }*/
+        csvWriter.close();
+        outCsvStream(response, tempFile);
+
+    }
+
+    /**
+     * 写入csv结束，写出流
+     */
+    public static void outCsvStream(HttpServletResponse response, File tempFile) throws IOException {
+        OutputStream out = response.getOutputStream();
+        byte[] b = new byte[10240];
+        File fileLoad = new File(tempFile.getCanonicalPath());
+        response.reset();
+        response.setContentType("application/csv");
+        String fileName = new String("学生明细".getBytes(), "iso-8859-1");
+        response.setHeader("content-disposition", "attachment; filename=" + fileName + ".csv");
+        FileInputStream in = new FileInputStream(fileLoad);
+        int n;
+        //为了保证excel打开csv不出现中文乱码
+        out.write(new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF});
+        while ((n = in.read(b)) != -1) {
+            //每次写入out1024字节
+            out.write(b, 0, n);
+        }
+        in.close();
+        out.close();
+    }
+
 }
