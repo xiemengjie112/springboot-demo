@@ -70,8 +70,6 @@ public class StudentController {
     @GetMapping(value = "/students")
     @ResponseBody
     public String findAllStudent(HttpServletRequest request){
-        String name = request.getParameter("name");
-        System.out.println(name);
         return studentServicel.findStudentAll();
     }
     @MyLog("批量插入学生信息")
