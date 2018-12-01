@@ -20,6 +20,7 @@ import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Describe:
@@ -33,6 +34,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentMapper studentMapper;
+
+
+
 
     @Autowired
     private StudentTest001Mapper studentTest001Mapper;
@@ -51,12 +55,12 @@ public class StudentServiceImpl implements StudentService {
         student1.setAge(1);
         student1.setDr("1");
         student1.setStudentName("测试1");
-        student1.setPkStudent("111113");
+        student1.setPkStudent(UUID.randomUUID().toString());
         Student student2 = new Student();
         student2.setAge(1);
         student2.setDr("1");
         student2.setStudentName("测试2");
-        student2.setPkStudent("1111114");
+        student2.setPkStudent(UUID.randomUUID().toString());
         students.add(student1);
         students.add(student2);
         int count = studentMapper.addStudents(students);
