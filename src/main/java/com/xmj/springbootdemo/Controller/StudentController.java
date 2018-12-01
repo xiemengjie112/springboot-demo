@@ -107,25 +107,7 @@ public class StudentController {
         }
     }
 
-    /**
-     * 内部类
-     */
-    @Controller
-    public class Test001Controller{
 
-      /*
-      * @Author: xieMengJie
-      * @Date: 2018/11/16 22:39
-      * @Param: []
-      * @return: java.lang.String
-      * @Description: 
-      */
-        @GetMapping(value = "/studentsTest")
-        @ResponseBody
-        public String findAllTestStudents(){
-            return studentServicel.findStudentTest001All();
-        }
-    }
 
 
 }
