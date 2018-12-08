@@ -1,4 +1,4 @@
-package com.xmj.springbootdemo.Controller;
+package com.xmj.springbootdemo.controller;
 import com.xmj.springbootdemo.annotation.MyLog;
 import com.xmj.springbootdemo.entity.student.Student;
 import com.xmj.springbootdemo.exception.ExcelException;
@@ -7,10 +7,7 @@ import com.xmj.springbootdemo.util.ExcelUtil;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +26,7 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    private StudentService studentServicel;
+    private  StudentService studentServicel;
 
     @GetMapping(value = "/index")
     public String toIndex() {
@@ -106,5 +103,11 @@ public class StudentController {
         return studentServicel.selectStudentsPageInfo(page, pageSize);
     }
 
+
+    @RequestMapping(value = "/send/mq")
+    @ResponseBody
+    public void sendMq(String message){
+         studentServicel.sendMq(message);
+   }
 
 }

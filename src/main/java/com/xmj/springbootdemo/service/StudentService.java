@@ -1,7 +1,5 @@
 package com.xmj.springbootdemo.service;
 
-import com.xmj.springbootdemo.entity.student.Student;
-
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -66,5 +64,8 @@ public interface StudentService {
      * @return
      */
     public String selectStudentsPageInfo(int page,int pageSize);
+
+
+    public void sendMq(String message);
 
 }

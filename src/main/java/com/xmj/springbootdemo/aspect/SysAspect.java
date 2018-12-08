@@ -69,7 +69,7 @@ public class SysAspect {
         Object[] args = joinPoint.getArgs();
         if(null != args && args.length > 0) {
             try {
-                // Controller 中所有包含 HttpServletRequest 参数的方法都要拿到请求参数。
+                // controller 中所有包含 HttpServletRequest 参数的方法都要拿到请求参数。
                 if (joinPoint.getArgs()[0] instanceof HttpServletRequest) {
                     HttpServletRequest paramReq = (HttpServletRequest) joinPoint.getArgs()[0];
                     String params = JSONObject.fromObject(paramReq.getParameterMap()).toString();

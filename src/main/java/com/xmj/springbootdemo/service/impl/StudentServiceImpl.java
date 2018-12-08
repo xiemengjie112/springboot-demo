@@ -10,7 +10,8 @@ import com.xmj.springbootdemo.mapper.test001.StudentTest001Mapper;
 import com.xmj.springbootdemo.service.StudentService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.poi.ss.formula.functions.T;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,10 +40,11 @@ public class StudentServiceImpl implements StudentService {
     private StudentMapper studentMapper;
 
 
-
-
     @Autowired
     private StudentTest001Mapper studentTest001Mapper;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public String findStudentTest001All() {
@@ -67,7 +69,7 @@ public class StudentServiceImpl implements StudentService {
         students.add(student1);
         students.add(student2);
         int count = studentMapper.addStudents(students);
-        if (count > 0){
+        if (count > 0) {
             return "OK";
         }
         return "error";
@@ -94,9 +96,16 @@ public class StudentServiceImpl implements StudentService {
         List<Map<String, Object>> listMap = studentMapper.findStudents();
         PageInfo pageInfo = new PageInfo<>(listMap);
         JSONObject result = new JSONObject();
-        result.put("total",pageInfo.getTotal());
-        result.put("rows,",pageInfo.getList());
+        result.put("total", pageInfo.getTotal());
+        result.put("rows,", pageInfo.getList());
         return result.toString();
+    }
+
+    @Override
+    public void sendMq(String message) {
+        //发送mq
+        //rabbitTemplate.convertAndSend("queueA",message);
+        rabbitTemplate.convertAndSend("fanoutExchange","",message);
     }
 
     @Override
