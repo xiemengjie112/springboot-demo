@@ -5,7 +5,7 @@
     <!-- 日志目录，applog为默认值。
          如果运维需要指定目录统一存放，那么需要在启动时传入此值: -Dlog.path=/data/apps/logs/vclecturer，
     -->
-    <property name="LOGPATH" value="${log.path:-/ideaWorkSpace/srpingboot-demo/applog}"/>
+    <property name="LOGPATH" value="${log.path:-/ideaWorkSpace/springboot-demo/applog}"/>
 
     <property name="CONSOLE_LOG_PATTERN"
               value="%date{HH:mm:ss.SSS} %highlight(%-5level) %boldYellow(%thread) %cyan(%logger{32}).%green(%L) %magenta(-) %msg%n"/>
