@@ -10,8 +10,9 @@ import com.xmj.springbootdemo.mapper.test001.StudentTest001Mapper;
 import com.xmj.springbootdemo.service.StudentService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Describe:
@@ -34,6 +32,8 @@ import java.util.UUID;
  */
 @Service
 public class StudentServiceImpl implements StudentService {
+
+    private static Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 
     @Autowired
@@ -105,7 +105,48 @@ public class StudentServiceImpl implements StudentService {
     public void sendMq(String message) {
         //发送mq
         //rabbitTemplate.convertAndSend("queueA",message);
-        rabbitTemplate.convertAndSend("fanoutExchange","",message);
+        rabbitTemplate.convertAndSend("fanoutExchange", "", message);
+    }
+
+    @Override
+    public void inseartBatch() {
+        List<Student> students = new ArrayList<>();
+        for (int i = 1; i <= 100000; i++) {
+            Student student = new Student();
+            student.setPkStudent("insert" + i);
+            student.setStudentName("name"+i);
+            student.setDr("1");
+            student.setAge(1);
+            students.add(student);
+        }
+        int pageSize = 10;
+
+        long start_time = System.currentTimeMillis();//开始执行时间
+
+        //分批数据信息
+        int totalSize = students.size(); //总记录数
+        int totalPage = totalSize / pageSize; //共N页
+
+        if (totalSize % pageSize != 0) {
+            totalPage += 1;
+            if (totalSize < pageSize) {
+                pageSize = students.size();
+            }
+        }
+
+        for (int pageNum = 1; pageNum < totalPage + 1; pageNum++) {
+            int starNum = (pageNum - 1) * pageSize;
+            int endNum = pageNum * pageSize > totalSize ? (totalSize) : pageNum * pageSize;
+
+                studentMapper.addStudents(students.subList(starNum, endNum));
+
+        }
+
+        logger.info("本次操作共耗时：约" +
+                (System.currentTimeMillis() - start_time) / 1000 + "秒，约" +
+                (System.currentTimeMillis() - start_time) / 60000 + "分钟,共" +
+                totalPage * pageSize + "条数据");
+
     }
 
     @Override

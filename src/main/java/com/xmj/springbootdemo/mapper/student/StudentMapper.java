@@ -2,7 +2,6 @@ package com.xmj.springbootdemo.mapper.student;
 
 import com.xmj.springbootdemo.entity.student.Student;
 import com.xmj.springbootdemo.entity.student.StudentExample;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -101,4 +100,6 @@ public interface StudentMapper {
     List<Map<String,Object>> findStudents();
 
     int addStudents(@Param("students") List<Student> students);
+
+
 }

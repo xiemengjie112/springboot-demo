@@ -28,7 +28,7 @@ spring:
       simple:
         acknowledge-mode: manual #手动确认
 server:
-  port: 8081
+  port: 80
 #扫描mapper.xml
 #mybatis:
 #  mapperLocations: classpath*:/Mapper/*.xml

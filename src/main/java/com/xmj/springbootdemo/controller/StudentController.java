@@ -110,4 +110,11 @@ public class StudentController {
          studentServicel.sendMq(message);
    }
 
+
+   @RequestMapping(value = "/student/insert/batch")
+    @ResponseBody
+    public void studentInsertBatch(){
+        studentServicel.inseartBatch();
+   }
+
 }

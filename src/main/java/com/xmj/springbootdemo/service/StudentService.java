@@ -68,4 +68,10 @@ public interface StudentService {
 
     public void sendMq(String message);
 
+
+    /**
+     * 批量插入数据
+     */
+    public void inseartBatch();
+
 }
