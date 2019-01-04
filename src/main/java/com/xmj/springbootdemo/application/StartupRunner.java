@@ -2,8 +2,8 @@ package com.xmj.springbootdemo.application;
 
 import com.xmj.springbootdemo.service.StudentService;
 import com.xmj.springbootdemo.util.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -21,13 +21,13 @@ import java.util.Map;
  */
 @Component
 @Order(1)
+@Slf4j
 public class StartupRunner implements CommandLineRunner {
 
     /**
      * 存放公共属性
      */
-    private static final List<Map<String,Object>> STUDENTS = new ArrayList<>();
-
+    private static final List<Map<String, Object>> STUDENTS = new ArrayList<>();
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -35,18 +35,16 @@ public class StartupRunner implements CommandLineRunner {
     @Autowired
     private RedisService redisService;
 
-
     @Autowired
     private StudentService studentService;
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("========================>启动加载资源操作");
+        log.info("========================>启动加载资源操作");
         webApplicationContext.getServletContext().setAttribute("students", STUDENTS);
         studentService.initStudents(STUDENTS);
-        redisService.set("sutedents",JSONArray.fromObject(STUDENTS).toString(),10L);
+        redisService.set("sutedents", JSONArray.fromObject(STUDENTS).toString(), 10L);
     }
-
 
 
 }
