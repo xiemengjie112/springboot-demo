@@ -13,6 +13,7 @@ public class WeChatAccessUtil {
 
     public static final String tooken = "xiemengjie"; //开发者自行定义Tooken
 
+
     public static boolean checkSignature(String signature, String timestamp, String nonce) {
         //1.定义数组存放tooken，timestamp,nonce
         String[] arr = {tooken, timestamp, nonce};
