@@ -14,4 +14,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) //注解在哪个阶段执行
 public @interface MyLog {
     String value() default "";
+
+
+
+
+
 }
