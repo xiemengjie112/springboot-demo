@@ -1,9 +1,11 @@
 package com.xmj.springbootdemo.weChat.controller;
 
+import com.xmj.springbootdemo.util.DateUtils;
 import com.xmj.springbootdemo.weChat.MessageUtil;
 import com.xmj.springbootdemo.weChat.TextMessage;
 import com.xmj.springbootdemo.weChat.TulingApiUtil;
 import com.xmj.springbootdemo.weChat.WeChatAccessUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,7 @@ import java.util.Map;
  * CreateDate: 2018/12/31 16:33
  */
 @RestController
+@Slf4j
 public class WeChatController {
 
 
@@ -52,22 +55,39 @@ public class WeChatController {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out =response.getWriter();
         try {
+            String message=null;
             Map<String, String> map=MessageUtil.xmlToMap(request);
-            String toUserName=map.get("ToUserName");
-            String fromUserName=map.get("FromUserName");
+            String toUserName=map.get("ToUserName");//开发者微信号
+            String fromUserName=map.get("FromUserName");//发送方帐号（一个OpenID）
             String msgType=map.get("MsgType");//消息类型
             String content=map.get("Content");//客户端发送的消息
-            String message=null;
+            String event = map.get("Event");//事件类型:subscribe(订阅)、unsubscribe(取消订阅)
+            TextMessage text =new TextMessage();
+            text.setFromUserName(toUserName);
+            text.setToUserName(fromUserName);
+            text.setCreateTime(new Date().getTime());
+            //事件推送
+            //获取用户基本信息
+            //Map<String,Object> userinfo = GetUserInfo.Openid_userinfo(fromUserName);
+           /* userinfo.forEach((k,v)->{
+                System.out.println("key:"+k);
+                System.out.println("value:"+v);
+            });*/
             if("text".equals(msgType)){
-                TextMessage text =new TextMessage();
-                text.setFromUserName(toUserName);
-                text.setToUserName(fromUserName);
                 text.setMsgType("text");
                 //这里填写回复内容
                 //图灵机器人
+                System.out.println("test..............");
                 text.setContent(TulingApiUtil.getTulingResult(content));
-                text.setCreateTime(new Date().getTime());
                 message=MessageUtil.textMessageToXml(text);
+            }else if("event".equals(msgType)){
+                if ("unsubscribe".equals(event)){
+                    log.info("{}在{}取消了关注",fromUserName, DateUtils.dateToStr(new Date()));
+                }else if ("subscribe".equals(event)){
+                    log.info("{}在{}进行了关注",toUserName,DateUtils.dateToStr(new Date()));
+                    text.setContent(fromUserName +": 感谢您的关注");
+                    message=MessageUtil.textMessageToXml(text);
+                }
             }
             out.print(message);
         } catch (Exception e) {

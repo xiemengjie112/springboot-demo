@@ -3,6 +3,7 @@ package com.xmj.springbootdemo.service.impl;
 import com.csvreader.CsvWriter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.xmj.springbootdemo.entity.student.Student;
 import com.xmj.springbootdemo.entity.student.StudentExample;
 import com.xmj.springbootdemo.mapper.student.StudentMapper;
@@ -55,6 +56,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String addStudents() {
+
+        List<String> lists = Lists.newArrayList();
         List<Student> students = new LinkedList();
         Student student1 = new Student();
         student1.setAge(1);
