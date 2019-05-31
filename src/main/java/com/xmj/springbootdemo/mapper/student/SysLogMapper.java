@@ -2,8 +2,9 @@ package com.xmj.springbootdemo.mapper.student;
 
 import com.xmj.springbootdemo.entity.student.SysLog;
 import com.xmj.springbootdemo.entity.student.SysLogExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SysLogMapper {
     int countByExample(SysLogExample example);
